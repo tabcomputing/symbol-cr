@@ -164,8 +164,11 @@ get bitwise.
 | `<->` | Remove from both ends | 2 |
 | `↑` | Take | 2 |
 | `↓` | Drop | 2 |
-| `@` | Index (1-based) | 2 |
+| `@>` | Index (index on left) | 2 |
+| `<@` | Index (array on left) | 2 |
 | `⌽` | Reverse | 1 |
+| `⍋` | Grade up (indices that sort ascending, 1-based) | 1 |
+| `⍒` | Grade down (indices that sort descending, 1-based) | 1 |
 
 ### Vectorization
 

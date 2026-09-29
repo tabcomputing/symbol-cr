@@ -123,7 +123,8 @@ module SYMBOL
         Structural:    >< (concat)  <> (wrap)  +> (cons)  <+ (snoc)
                        ~> (zip)  <~ (piz)
                        -> (remove-back)  <- (remove-front)  <-> (remove-both)
-                       ↑ (take)  ↓ (drop)  @ (index)  ⌽ (reverse)
+                       ↑ (take)  ↓ (drop)  @> <@ (index)  ⌽ (reverse)
+                       ⍋ ⍒ (grade up/down)
 
       Examples:
         > 2 + 3

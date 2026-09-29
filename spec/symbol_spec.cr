@@ -331,16 +331,47 @@ describe SYMBOL do
       result.should eq([1_i64, 2_i64, 3_i64, 4_i64] of SYMBOL::Tacit::TacitValue)
     end
 
-    it "index @ (1-indexed)" do
-      result = eval("2 @ [10, 20, 30]")
+    it "index @> (1-indexed)" do
+      result = eval("2 @> [10, 20, 30]")
       result.should be_a(Int64)
       result.should eq(20)
     end
 
-    it "index @ negative (from end)" do
-      result = eval("-1 @ [10, 20, 30]")
+    it "index @> negative (from end)" do
+      result = eval("-1 @> [10, 20, 30]")
       result.should be_a(Int64)
       result.should eq(30)
+    end
+
+    it "index <@ (array on left)" do
+      result = eval("[10, 20, 30] <@ 2")
+      result.should be_a(Int64)
+      result.should eq(20)
+    end
+
+    it "index @> with array of indices" do
+      result = eval("[2, 3, 1] @> [10, 20, 30]")
+      result.should eq([20_i64, 30_i64, 10_i64] of SYMBOL::Tacit::TacitValue)
+    end
+
+    it "grade up ⍋ (returns 1-based indices)" do
+      result = eval("⍋ [30, 10, 20]")
+      result.should eq([2_i64, 3_i64, 1_i64] of SYMBOL::Tacit::TacitValue)
+    end
+
+    it "grade down ⍒ (returns 1-based indices)" do
+      result = eval("⍒ [30, 10, 20]")
+      result.should eq([1_i64, 3_i64, 2_i64] of SYMBOL::Tacit::TacitValue)
+    end
+
+    it "grade up + index = sort ascending" do
+      result = eval("(⍋ [30, 10, 20]) @> [30, 10, 20]")
+      result.should eq([10_i64, 20_i64, 30_i64] of SYMBOL::Tacit::TacitValue)
+    end
+
+    it "grade down + index = sort descending" do
+      result = eval("(⍒ [30, 10, 20]) @> [30, 10, 20]")
+      result.should eq([30_i64, 20_i64, 10_i64] of SYMBOL::Tacit::TacitValue)
     end
 
     it "reverse ⌽" do

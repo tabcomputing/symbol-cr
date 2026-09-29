@@ -93,11 +93,14 @@ module SYMBOL
         "Σ"  => 1,  # sum
         "Π"  => 1,  # product
         "#"  => 1,  # count
+        "⍋"  => 1,  # grade up
+        "⍒"  => 1,  # grade down
         "⌈"  => 1,  # max/ceiling
         "⌊"  => 1,  # min/floor
         # Special
-        "?" => 2, # query/unify
-        "@" => 2, # apply
+        "?" => 2,  # query/unify
+        "@>" => 2, # index (index on left)
+        "<@" => 2, # index (array on left)
       }
 
       def initialize(@symbol, @arity = -1, location = nil)

@@ -439,16 +439,21 @@ module SYMBOL
           end
           Resolved.new((result || [] of TacitValue).as(TacitValue))
 
-        when "@"  # index (1-indexed, negative from end)
-          n = to_int(values[0]).to_i32
-          arr = to_array(values[1])
-          if n > 0
-            Resolved.new(arr[n - 1]?)
-          elsif n < 0
-            Resolved.new(arr[arr.size + n]?)
-          else
-            Resolved.new(nil)
-          end
+        when "@>"  # index (index on left, array on right)
+          index_into(values[0], values[1])
+
+        when "<@"  # index (array on left, index on right)
+          index_into(values[1], values[0])
+
+        when "⍋"  # grade up (indices that would sort ascending, 1-based)
+          arr = to_array(values[0])
+          indices = (0...arr.size).to_a.sort { |a, b| compare(arr[a], arr[b]) }
+          Resolved.new(indices.map { |i| (i + 1).to_i64.as(TacitValue) }.as(TacitValue))
+
+        when "⍒"  # grade down (indices that would sort descending, 1-based)
+          arr = to_array(values[0])
+          indices = (0...arr.size).to_a.sort { |a, b| compare(arr[b], arr[a]) }
+          Resolved.new(indices.map { |i| (i + 1).to_i64.as(TacitValue) }.as(TacitValue))
 
         when "⌽"  # reverse
           arr = to_array(values[0])
@@ -457,6 +462,43 @@ module SYMBOL
         else
           # Unknown operator - return suspended
           suspended
+        end
+      end
+
+      # Compare two values for sorting
+      private def compare(a : TacitValue, b : TacitValue) : Int32
+        fa = to_float(a)
+        fb = to_float(b)
+        (fa <=> fb) || 0
+      end
+
+      # Index into an array (1-indexed, negative from end)
+      # Supports single index or array of indices
+      private def index_into(index : TacitValue, arr_val : TacitValue) : EvalResult
+        arr = to_array(arr_val)
+        case index
+        when Array
+          indices = index.as(Array(TacitValue))
+          result = indices.map { |i|
+            n = to_int(i).to_i32
+            if n > 0
+              arr[n - 1]?.as(TacitValue)
+            elsif n < 0
+              arr[arr.size + n]?.as(TacitValue)
+            else
+              nil.as(TacitValue)
+            end
+          }
+          Resolved.new(result.as(TacitValue))
+        else
+          n = to_int(index).to_i32
+          if n > 0
+            Resolved.new(arr[n - 1]?)
+          elsif n < 0
+            Resolved.new(arr[arr.size + n]?)
+          else
+            Resolved.new(nil)
+          end
         end
       end
 

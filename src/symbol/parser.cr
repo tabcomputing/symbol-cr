@@ -127,9 +127,13 @@ module SYMBOL
         advance
         AST::ExprOperator.new("?", 2)
 
-      when TokenType::AtSign
+      when TokenType::IndexRight
         advance
-        AST::ExprOperator.new("@", 2)
+        AST::ExprOperator.new("@>", 2)
+
+      when TokenType::IndexLeft
+        advance
+        AST::ExprOperator.new("<@", 2)
 
       when TokenType::Hash
         advance
@@ -220,6 +224,14 @@ module SYMBOL
       when TokenType::Reverse
         advance
         AST::ExprOperator.new("⌽", 1)
+
+      when TokenType::GradeUp
+        advance
+        AST::ExprOperator.new("⍋", 1)
+
+      when TokenType::GradeDown
+        advance
+        AST::ExprOperator.new("⍒", 1)
 
       when TokenType::LParen
         parse_grouped

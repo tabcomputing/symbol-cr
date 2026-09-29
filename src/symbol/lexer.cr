@@ -24,7 +24,8 @@ module SYMBOL
     GreaterEq
     Bang
     Question
-    AtSign
+    IndexRight  # @>
+    IndexLeft   # <@
     Hash        # #
     Tilde       # ~
     Dollar      # $
@@ -40,6 +41,8 @@ module SYMBOL
     Take        # ↑
     Drop        # ↓
     Reverse     # ⌽
+    GradeUp     # ⍋
+    GradeDown   # ⍒
 
     # Assignment
     Assign      # =
@@ -175,6 +178,9 @@ module SYMBOL
         elsif peek == '~'
           advance
           Token.new(TokenType::Piz, "<~", @line, start_col)
+        elsif peek == '@'
+          advance
+          Token.new(TokenType::IndexLeft, "<@", @line, start_col)
         elsif peek == '='
           advance
           Token.new(TokenType::LessEq, "<=", @line, start_col)
@@ -194,7 +200,12 @@ module SYMBOL
       when '?'
         Token.new(TokenType::Question, "?", @line, start_col)
       when '@'
-        Token.new(TokenType::AtSign, "@", @line, start_col)
+        if peek == '>'
+          advance
+          Token.new(TokenType::IndexRight, "@>", @line, start_col)
+        else
+          Token.new(TokenType::Error, "Unexpected character: @ (use @> or <@)", @line, start_col)
+        end
       when '#'
         Token.new(TokenType::Hash, "#", @line, start_col)
       when '~'
@@ -270,6 +281,10 @@ module SYMBOL
         Token.new(TokenType::Drop, "↓", @line, start_col)
       when '⌽'
         Token.new(TokenType::Reverse, "⌽", @line, start_col)
+      when '⍋'
+        Token.new(TokenType::GradeUp, "⍋", @line, start_col)
+      when '⍒'
+        Token.new(TokenType::GradeDown, "⍒", @line, start_col)
       else
         if c.ascii_number?
           number(c, start_col)
