@@ -4,6 +4,9 @@
 /.shards/
 *.dwarf
 
+# Build output (just build)
+/symbol
+
 # WASM build output
 *.wasm
 
