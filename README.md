@@ -14,7 +14,7 @@ Add to your `shard.yml`:
 ```yaml
 dependencies:
   symbols:
-    github: axiomatic/symbol
+    github: trans/symbol-cr
 ```
 
 Then run `shards install`.
