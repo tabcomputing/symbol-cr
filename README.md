@@ -14,7 +14,7 @@ Add to your `shard.yml`:
 ```yaml
 dependencies:
   symbols:
-    github: trans/symbol-cr
+    github: tabcomputing/symbol-cr
 ```
 
 Then run `shards install`.
